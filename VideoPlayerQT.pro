@@ -25,10 +25,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        dialog.cpp
+    videoplayerdialog.cpp \
+    videoplayerqt.cpp
 
 HEADERS += \
-        dialog.h
+    videoplayerdialog.h \
+    videoplayerqt.h
 
 FORMS += \
-        dialog.ui
+    videoplayerdialog.ui \
+    videoPlayerqt.ui

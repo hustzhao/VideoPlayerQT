@@ -1,10 +1,10 @@
-#include "dialog.h"
+#include "videoplayerqt.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Dialog w;
+    VideoPlayerQT w;
     w.show();
 
     return a.exec();
