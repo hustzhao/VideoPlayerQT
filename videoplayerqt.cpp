@@ -3,6 +3,25 @@
 #include <QDebug>
 #include <QFileDialog>
 
+#define SDL_MAIN_HANDLED
+
+extern "C"
+{
+    #include "libavcodec/avcodec.h"
+    #include "libavformat/avformat.h"
+    #include <libavutil/time.h>
+    #include "libavutil/pixfmt.h"
+    #include "libswscale/swscale.h"
+    #include "libswresample/swresample.h"
+
+    #include <SDL.h>
+    #include <SDL_audio.h>
+    #include <SDL_types.h>
+    #include <SDL_name.h>
+    #include <SDL_main.h>
+    #include <SDL_config.h>
+}
+
 VideoPlayerQT::VideoPlayerQT(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::VideoPlayerQT)
@@ -11,6 +30,14 @@ VideoPlayerQT::VideoPlayerQT(QWidget *parent) :
 
     connect(ui->pushButtonOpen,SIGNAL(clicked()),this,SLOT(slotBtnClick()));
     connect(ui->pushButtonPlay,SIGNAL(clicked()),this,SLOT(slotBtnClick()));
+
+    av_register_all();
+    avformat_network_init();
+
+    if (SDL_Init(SDL_INIT_AUDIO)) {
+        fprintf(stderr,"Could not initialize SDL - %s. \n", SDL_GetError());
+        exit(1);
+    }
 }
 
 VideoPlayerQT::~VideoPlayerQT()
