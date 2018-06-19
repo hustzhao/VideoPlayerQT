@@ -8,7 +8,7 @@ VideoPlayer::VideoPlayer()
 
 VideoPlayer::~VideoPlayer()
 {
-    delete videoplayerthread_;
+
 }
 
 void VideoPlayer::Init() {
@@ -20,16 +20,16 @@ void VideoPlayer::Init() {
         exit(1);
     }
 
-    videoplayerthread_ = new VidePlayerThread();
+
     return;
 }
 
 void VideoPlayer::Play() {
-    videoplayerthread_->start();
+
 }
 
 void VideoPlayer::setFileName(const QString file_name) {
     qDebug()<<file_name;
 
-    videoplayerthread_->setFileName(file_name);
+
 }

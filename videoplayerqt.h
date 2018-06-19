@@ -24,6 +24,7 @@ private:
     Ui::VideoPlayerQT *ui;
     VideoPlayerDialog* video_player_dialog_{NULL};
     VideoPlayer* video_player_{NULL};
+    VidePlayerThread* videoplayerthread_{NULL};
     QString file_name_{};
 };
 

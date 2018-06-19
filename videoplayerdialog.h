@@ -14,9 +14,13 @@ class VideoPlayerDialog : public QDialog
 public:
     explicit VideoPlayerDialog(QWidget *parent = 0);
     ~VideoPlayerDialog();
-
+public slots:
+    void slotGetOneFrame(QImage);
 private:
     Ui::VideoPlayerDialog *ui;
+    QImage image_;
+protected:
+    void paintEvent(QPaintEvent *event);
 };
 
 #endif // VIDEOPLAYERDIALOG_H

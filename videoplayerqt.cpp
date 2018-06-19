@@ -19,10 +19,15 @@ VideoPlayerQT::VideoPlayerQT(QWidget *parent) :
     video_player_ = new VideoPlayer();
 
     video_player_->Init();
+
+    videoplayerthread_ = new VidePlayerThread();
+
+    connect(videoplayerthread_,SIGNAL(sig_GetOneFrame(QImage)),video_player_dialog_,SLOT(slotGetOneFrame(QImage)));
 }
 
 VideoPlayerQT::~VideoPlayerQT()
 {
+    delete videoplayerthread_;
     delete video_player_dialog_;
     delete ui;
 }
@@ -43,7 +48,7 @@ void VideoPlayerQT::slotBtnClick()
        }
        qDebug()<<file_name_;
        video_player_->setFileName(file_name_);
-
+       videoplayerthread_->setFileName(file_name_);
     }
     else if (QObject::sender() == ui->pushButtonPlay)
     {
@@ -51,6 +56,7 @@ void VideoPlayerQT::slotBtnClick()
         video_player_dialog_->show();
 
         video_player_->Play();
+        videoplayerthread_->start();
     }
 
 }

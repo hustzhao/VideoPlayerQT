@@ -2,6 +2,7 @@
 #define VIDEPLAYERTHREAD_H
 
 #include <QThread>
+#include <QImage>
 
 #define SDL_MAIN_HANDLED
 
@@ -34,7 +35,9 @@ protected:
     void run();
 private:
     QString file_name_;
-    void SaveFrame(AVFrame *pFrame, int width, int height,int index);
+    void disPlayVideo(QImage img);
+signals:
+    void sig_GetOneFrame(QImage);
 };
 
 #endif // VIDEPLAYERTHREAD_H

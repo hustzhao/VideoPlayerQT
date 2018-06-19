@@ -10,8 +10,7 @@ public:
     void Init();
     void Play();
     void setFileName(const QString file_name);
-private:
-    VidePlayerThread* videoplayerthread_;
+
 };
 
 #endif // VIDEOPLAYER_H

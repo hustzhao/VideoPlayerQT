@@ -93,12 +93,12 @@ void VidePlayerThread::run() {
 
     img_convert_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height,
             pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height,
-            PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL);
+            PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
 
-    numBytes = avpicture_get_size(PIX_FMT_RGB24, pCodecCtx->width,pCodecCtx->height);
+    numBytes = avpicture_get_size(PIX_FMT_RGB32, pCodecCtx->width,pCodecCtx->height);
 
     out_buffer = (uint8_t *) av_malloc(numBytes * sizeof(uint8_t));
-    avpicture_fill((AVPicture *) pFrameRGB, out_buffer, PIX_FMT_RGB24,
+    avpicture_fill((AVPicture *) pFrameRGB, out_buffer, PIX_FMT_RGB32,
             pCodecCtx->width, pCodecCtx->height);
 
     int y_size = pCodecCtx->width * pCodecCtx->height;
@@ -107,8 +107,6 @@ void VidePlayerThread::run() {
     av_new_packet(packet, y_size);
 
     av_dump_format(pFormatCtx, 0, file_path, 0);
-
-    int index = 0;
 
     while (1)
     {
@@ -131,10 +129,10 @@ void VidePlayerThread::run() {
                         pFrame->linesize, 0, pCodecCtx->height, pFrameRGB->data,
                         pFrameRGB->linesize);
 
-                this->SaveFrame(pFrameRGB, pCodecCtx->width,pCodecCtx->height,index++); //保存图片
-                if (index > 50) {
-                    return;
-                }
+                //把这个RGB数据 用QImage加载
+                QImage tmpImg((uchar *)out_buffer,pCodecCtx->width,pCodecCtx->height,QImage::Format_RGB32);
+                QImage image = tmpImg.copy(); //把图像复制一份 传递给界面显示
+                this->disPlayVideo(image); //调用激发信号的函数
             }
         }
         av_free_packet(packet);
@@ -146,31 +144,8 @@ void VidePlayerThread::run() {
     avformat_close_input(&pFormatCtx);
 }
 
-void VidePlayerThread::SaveFrame(AVFrame *pFrame, int width, int height,int index)
+void VidePlayerThread::disPlayVideo(QImage img)
 {
-  qDebug()<<"SaveFrame";
-  FILE *pFile;
-  char szFilename[32];
-  int  y;
-
-  // Open file
-  sprintf(szFilename, "frame%d.ppm", index);
-  pFile=fopen(szFilename, "wb");
-
-  if(pFile==NULL)
-    return;
-    qDebug()<<"Here.\n";
-  // Write header
-  fprintf(pFile, "P6 %d %d 255 ", width, height);
-
-  // Write pixel data
-  for(y=0; y<height; y++)
-  {
-    fwrite(pFrame->data[0]+y*pFrame->linesize[0], 1, width*3, pFile);
-  }
-    qDebug()<<"Here2.\n";
-  // Close file
-  fclose(pFile);
-
+    //qDebug()<<"disPlayVideo";
+    emit sig_GetOneFrame(img);
 }
-
