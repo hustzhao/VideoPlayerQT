@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "videoplayerdialog.h"
+#include "videoplayer.h"
 
 namespace Ui {
 class VideoPlayerQT;
@@ -21,7 +22,8 @@ private slots:
 
 private:
     Ui::VideoPlayerQT *ui;
-    VideoPlayerDialog* video_player_{NULL};
+    VideoPlayerDialog* video_player_dialog_{NULL};
+    VideoPlayer* video_player_{NULL};
     QString file_name_{};
 };
 
